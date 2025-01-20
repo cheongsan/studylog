@@ -3,19 +3,15 @@ package io.github.cheongsan.hello_spring.service;
 import io.github.cheongsan.hello_spring.domain.Member;
 import io.github.cheongsan.hello_spring.repository.MemberRepository;
 import io.github.cheongsan.hello_spring.repository.MemoryMemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class MemberService {
+
     //private final MemberRepository memberRepository = new MemoryMemberRepository();
     // 외부에서 넣어주도록 변경하기
     private final MemberRepository memberRepository;
-
-    @Autowired
     public MemberService(MemoryMemberRepository memberRepository){
         this.memberRepository = memberRepository;
     }
