@@ -38,7 +38,7 @@ public class ShortenUrlRestController {
         // log.info("createShortenUrl {}", shortenUrlCreateRequestDto.getOriginalUrl());
         // 일반적으로 DTO는 매우 많기에 .getOriginalUrl 하나씩 기록하는 것 보단 DTO를 로그로 기록한다.
         // 로그의 크기가 증가함에 주의한다.
-        log.trace("shortenUrlCreateRequestDto {}", shortenUrlCreateRequestDto);
+        // log.trace("shortenUrlCreateRequestDto {}", shortenUrlCreateRequestDto);
         // 결과: 2025-02-02T19:13:20.060+09:00  INFO 2660 --- [nio-8080-exec-1] k.c.s.p.ShortenUrlRestController         : createShortenUrl https://www.inflearn.com/
 
         ShortenUrlCreateResponseDto shortenUrlCreateResponseDto =

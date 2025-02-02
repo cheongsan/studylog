@@ -32,7 +32,7 @@ public class SimpleShortenUrlService {
         // 의미없는 로그
         // log.info("shortenUrlKey {}", shortenUrlKey);
         // getUniqueShortenUrlKey가 종종 버그를 발생한다고 가정, 실제로 유니크한 값이 반환되는지 검증하기
-        log.debug("getUniqueShortenUrlKey {}", shortenUrlKey);
+        // log.debug("getUniqueShortenUrlKey {}", shortenUrlKey);
 
         ShortenUrl shortenUrl = new ShortenUrl(originalUrl, shortenUrlKey);
         shortenUrlRepository.saveShortenUrl(shortenUrl);
@@ -88,6 +88,9 @@ public class SimpleShortenUrlService {
 
             if(null == shortenUrl)
                 return shortenUrlKey;
+
+            // 1회라도 키가 중복될 경우 개발자에게 경고를 전달하기
+            log.warn("단축 URL 생성 재시도! 재시도 횟수: {}", count + 1);
         }
 
         // ShortenUrlKey가 중복될 경우 키 생성 재시도
