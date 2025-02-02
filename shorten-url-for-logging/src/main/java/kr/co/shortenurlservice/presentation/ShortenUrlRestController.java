@@ -1,6 +1,7 @@
 package kr.co.shortenurlservice.presentation;
 
 import kr.co.shortenurlservice.application.SimpleShortenUrlService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+@Slf4j
 @RestController
 public class ShortenUrlRestController {
 
@@ -22,15 +24,25 @@ public class ShortenUrlRestController {
         this.simpleShortenUrlService = simpleShortenUrlService;
     }
 
+    // POST: 단축 URL 생성
     @RequestMapping(value = "/shortenUrl", method = RequestMethod.POST)
     public ResponseEntity<ShortenUrlCreateResponseDto> createShortenUrl(
             @Valid @RequestBody ShortenUrlCreateRequestDto shortenUrlCreateRequestDto
     ) {
+        // println: 실무에서 권장되지 않는 로그 저장 방법
+        // System.out.println(shortenUrlCreateRequestDto.getOriginalUrl());
+        // 결과: https://www.inflearn.com/
+
+        // lombok 로그 저장 방법
+        log.info("createShortenUrl {}", shortenUrlCreateRequestDto.getOriginalUrl());
+        // 결과: 2025-02-02T19:13:20.060+09:00  INFO 2660 --- [nio-8080-exec-1] k.c.s.p.ShortenUrlRestController         : createShortenUrl https://www.inflearn.com/
+
         ShortenUrlCreateResponseDto shortenUrlCreateResponseDto =
                 simpleShortenUrlService.generateShortenUrl(shortenUrlCreateRequestDto);
         return ResponseEntity.ok(shortenUrlCreateResponseDto);
     }
 
+    // GET: 단축 URL로 접속 시 리디렉션
     @RequestMapping(value = "/{shortenUrlKey}", method = RequestMethod.GET)
     public ResponseEntity<?> redirectShortenUrl(
             @PathVariable String shortenUrlKey
@@ -44,6 +56,7 @@ public class ShortenUrlRestController {
         return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
     }
 
+    // GET: 단축 URL 정보 조회
     @RequestMapping(value = "/shortenUrl/{shortenUrlKey}", method = RequestMethod.GET)
     public ResponseEntity<ShortenUrlInformationDto> getShortenUrlInformation(
             @PathVariable String shortenUrlKey
@@ -53,6 +66,7 @@ public class ShortenUrlRestController {
         return ResponseEntity.ok(shortenUrlInformationDto);
     }
 
+    // GET: 모든 단축 URL 조회
     @RequestMapping(value = "/shortenUrls", method = RequestMethod.GET)
     public ResponseEntity<List<ShortenUrlInformationDto>> getAllShortenUrlInformation() {
         List<ShortenUrlInformationDto> shortenUrlInformationDtoList = simpleShortenUrlService.getAllShortenUrlInformationDto();
