@@ -1,6 +1,7 @@
 package kr.co.shortenurlservice.presentation;
 
 import kr.co.shortenurlservice.application.SimpleShortenUrlService;
+import kr.co.shortenurlservice.domain.NotFoundShortenUrlException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,7 +47,7 @@ public class ShortenUrlRestController {
     @RequestMapping(value = "/{shortenUrlKey}", method = RequestMethod.GET)
     public ResponseEntity<?> redirectShortenUrl(
             @PathVariable String shortenUrlKey
-    ) throws URISyntaxException {
+    ) throws URISyntaxException/*, NotFoundShortenUrlException*/ {
         String originalUrl = simpleShortenUrlService.getOriginalUrlByShortenUrlKey(shortenUrlKey);
 
         URI redirectUri = new URI(originalUrl);
@@ -60,7 +61,7 @@ public class ShortenUrlRestController {
     @RequestMapping(value = "/shortenUrl/{shortenUrlKey}", method = RequestMethod.GET)
     public ResponseEntity<ShortenUrlInformationDto> getShortenUrlInformation(
             @PathVariable String shortenUrlKey
-    ) {
+    ) /*throws NotFoundShortenUrlException*/ {
         ShortenUrlInformationDto shortenUrlInformationDto =
                 simpleShortenUrlService.getShortenUrlInformationByShortenUrlKey(shortenUrlKey);
         return ResponseEntity.ok(shortenUrlInformationDto);

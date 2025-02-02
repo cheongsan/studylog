@@ -39,11 +39,11 @@ public class SimpleShortenUrlService {
         return shortenUrlCreateResponseDto;
     }
 
-    public String getOriginalUrlByShortenUrlKey(String shortenUrlKey) {
+    public String getOriginalUrlByShortenUrlKey(String shortenUrlKey) /*throws NotFoundShortenUrlException*/ {
         ShortenUrl shortenUrl = shortenUrlRepository.findShortenUrlByShortenUrlKey(shortenUrlKey);
 
         if(null == shortenUrl)
-            throw new NotFoundShortenUrlException();
+            throw new NotFoundShortenUrlException("단축 URL을 찾지 못했습니다. shortenUrlKey=" + shortenUrlKey);
 
         shortenUrl.increaseRedirectCount();
         shortenUrlRepository.saveShortenUrl(shortenUrl);
@@ -53,11 +53,11 @@ public class SimpleShortenUrlService {
         return originalUrl;
     }
 
-    public ShortenUrlInformationDto getShortenUrlInformationByShortenUrlKey(String shortenUrlKey) {
+    public ShortenUrlInformationDto getShortenUrlInformationByShortenUrlKey(String shortenUrlKey) /*throws NotFoundShortenUrlException*/ {
         ShortenUrl shortenUrl = shortenUrlRepository.findShortenUrlByShortenUrlKey(shortenUrlKey);
 
         if(null == shortenUrl)
-            throw new NotFoundShortenUrlException();
+            throw new NotFoundShortenUrlException("단축 URL을 찾지 못했습니다. shortenUrlKey=" + shortenUrlKey);
 
         ShortenUrlInformationDto shortenUrlInformationDto = new ShortenUrlInformationDto(shortenUrl);
 
