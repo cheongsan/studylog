@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleLackOfShortenUrlKeyException(
             LackOfShortenUrlKeyException ex
     ) {
-        // 개발자에게 알려줄 수 있는 수단 필요
+        // FETAL 레벨의 로그를 기록하는 것보단 개발자에게 알림을 전송하는 부분을 추가하는 것이 좋다.
         return new ResponseEntity<>("단축 URL 자원이 부족합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -28,6 +28,15 @@ public class GlobalExceptionHandler {
         // log.info("단축 URL을 찾지 못했습니다.");
         log.info(ex.getMessage());
         //결과: 2025-02-02T20:17:13.629+09:00  INFO 40392 --- [nio-8080-exec-1] k.c.s.p.GlobalExceptionHandler           : 단축 URL을 찾지 못했습니다. shortenUrlKey=63xmFS3B
+
+        //log.error(ex.getMessage());
+        //사용자는 ShortenUrlKey로 아무런 값이나 요청할 수 있고, 이러한 요청이 개발자의 개입이 필요한 상황은 아니다.
+        //INFO 레벨, 또는 WARN 레벨로 지정하는게 바람직하다.
+
+        //ERROR는 개발자의 개입이 필요한 상황
+        //예외가 발생했을 때 무조건 ERROR 레벨로 기록하는 것은 아니다.
+        //ShortenUrlKey가 절대로 잘 못된 값을 요청할 수 없는 경우에 ERROR 레벨로 지정하는 것이 적절하다.
+
         // NOT_FOUND: 404 에러
         return new ResponseEntity<>("단축 URL을 찾지 못했습니다.", HttpStatus.NOT_FOUND);
     }

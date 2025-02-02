@@ -1,7 +1,12 @@
 package kr.co.shortenurlservice.domain;
 
+import lombok.ToString;
+
 import java.util.Random;
 
+@ToString
+//AS-IS: INFO 31588 --- [nio-8080-exec-4] k.c.s.a.SimpleShortenUrlService          : shortenUrl 생성: kr.co.shortenurlservice.domain.ShortenUrl@2f2a640e
+//TO-BE: INFO 35976 --- [nio-8080-exec-1] k.c.s.a.SimpleShortenUrlService          : shortenUrl 생성: ShortenUrl(originalUrl=https://www.inflearn.com/, shortenUrlKey=rHG9dt57, redirectCount=0)
 public class ShortenUrl {
     private String originalUrl;
     private String shortenUrlKey;

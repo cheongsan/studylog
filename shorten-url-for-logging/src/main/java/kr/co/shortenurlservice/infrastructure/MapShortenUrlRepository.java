@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class MapShortenUrlRepository implements ShortenUrlRepository {
-
+    // 실제 데이터베이스라고 가정할 때: 쿼리를 디버그나 트레이스 레벨로 남길 수 있다.
     private Map<String, ShortenUrl> shortenUrls = new ConcurrentHashMap<>();
 
     @Override

@@ -7,13 +7,13 @@ import kr.co.shortenurlservice.domain.ShortenUrlRepository;
 import kr.co.shortenurlservice.presentation.ShortenUrlCreateRequestDto;
 import kr.co.shortenurlservice.presentation.ShortenUrlCreateResponseDto;
 import kr.co.shortenurlservice.presentation.ShortenUrlInformationDto;
-//import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//@Slf4j
+@Slf4j
 @Service
 public class SimpleShortenUrlService {
 
@@ -31,9 +31,14 @@ public class SimpleShortenUrlService {
         String shortenUrlKey = getUniqueShortenUrlKey();
         // 의미없는 로그
         // log.info("shortenUrlKey {}", shortenUrlKey);
+        // getUniqueShortenUrlKey가 종종 버그를 발생한다고 가정, 실제로 유니크한 값이 반환되는지 검증하기
+        log.debug("getUniqueShortenUrlKey {}", shortenUrlKey);
 
         ShortenUrl shortenUrl = new ShortenUrl(originalUrl, shortenUrlKey);
         shortenUrlRepository.saveShortenUrl(shortenUrl);
+        // originalUrl, shortenUrlKey, redirectCount가 함께 로그에 기록된다
+        // 엔티티의 생성, 상태 변화의 수준을 info 레벨로 기록할 때 운용에 필요한 로그가 된다.
+        log.info("shortenUrl 생성: {}", shortenUrl);
 
         ShortenUrlCreateResponseDto shortenUrlCreateResponseDto = new ShortenUrlCreateResponseDto(shortenUrl);
         return shortenUrlCreateResponseDto;
@@ -85,6 +90,8 @@ public class SimpleShortenUrlService {
                 return shortenUrlKey;
         }
 
+        // ShortenUrlKey가 중복될 경우 키 생성 재시도
+        // 5회 이상 시도에도 중복이 발생하면 단축 URL 자원이 고갈된 상황으로 간주한다. --> 서비스에 충분히 치명적인 상황
         throw new LackOfShortenUrlKeyException();
     }
 
